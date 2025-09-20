@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>RPG Adventure</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Главное меню -->
+        <div id="main-menu" class="screen">
+            <div class="title">
+                <h1>⚔️ RPG Adventure</h1>
+                <p>Твоё приключение начинается здесь</p>
+            </div>
+            <div class="menu-buttons">
+                <button id="new-game-btn" class="btn btn-primary">Новая игра</button>
+                <button id="continue-btn" class="btn btn-secondary" style="display:none;">Продолжить</button>
+            </div>
+        </div>
+
+        <!-- Создание персонажа -->
+        <div id="character-creation" class="screen" style="display:none;">
+            <h2>Создание персонажа</h2>
+            
+            <div class="section">
+                <label for="character-name">Имя героя:</label>
+                <input type="text" id="character-name" placeholder="Введите имя" maxlength="20">
+            </div>
+
+            <div class="section">
+                <h3>Выберите класс:</h3>
+                <div class="class-selection">
+                    <div class="class-option" data-class="warrior">
+                        <h4>⚔️ Воин</h4>
+                        <p>Сила и ловкость. Ближний и дальний бой.</p>
+                        <small>Основные атрибуты: Сила, Ловкость</small>
+                    </div>
+                    <div class="class-option" data-class="mage">
+                        <h4>🔮 Маг</h4>
+                        <p>Магические заклинания и посохи.</p>
+                        <small>Основной атрибут: Интеллект</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Преимущества (выберите до 2):</h3>
+                <div class="traits" id="advantages">
+                    <div class="trait" data-trait="strong" data-level="1">
+                        <span>💪 Сильный (+2 Сила)</span>
+                    </div>
+                    <div class="trait" data-trait="agile" data-level="1">
+                        <span>🏃 Ловкий (+2 Ловкость)</span>
+                    </div>
+                    <div class="trait" data-trait="smart" data-level="1">
+                        <span>🧠 Умный (+2 Интеллект)</span>
+                    </div>
+                    <div class="trait" data-trait="tough" data-level="1">
+                        <span>🛡️ Выносливый (+20 HP)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Недостатки (выберите до 2):</h3>
+                <div class="traits" id="disadvantages">
+                    <div class="trait" data-trait="weak" data-level="1">
+                        <span>😰 Слабый (-1 Сила)</span>
+                    </div>
+                    <div class="trait" data-trait="clumsy" data-level="1">
+                        <span>🤡 Неуклюжий (-1 Ловкость)</span>
+                    </div>
+                    <div class="trait" data-trait="dull" data-level="1">
+                        <span>😵 Тупой (-1 Интеллект)</span>
+                    </div>
+                    <div class="trait" data-trait="frail" data-level="1">
+                        <span>🩹 Хрупкий (-10 HP)</span>
+                    </div>
+                </div>
+            </div>
+
+            <button id="create-character-btn" class="btn btn-primary" disabled>Создать персонажа</button>
+        </div>
+
+        <!-- Игровой экран -->
+        <div id="game-screen" class="screen" style="display:none;">
+            <!-- Вкладки -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="character">Персонаж</button>
+                <button class="tab-btn" data-tab="adventure">Приключение</button>
+                <button class="tab-btn" data-tab="abilities">Способности</button>
+            </div>
+
+            <!-- Вкладка Персонаж -->
+            <div id="tab-character" class="tab-content active">
+                <div class="character-info">
+                    <div class="character-header">
+                        <h3 id="char-name">Герой</h3>
+                        <span id="char-level">Уровень 1</span>
+                    </div>
+                    <div class="character-stats">
+                        <div class="stat-group">
+                            <div class="stat">
+                                <span class="stat-label">HP:</span>
+                                <span id="char-hp">100/100</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Опыт:</span>
+                                <span id="char-exp">0/100</span>
+                            </div>
+                        </div>
+                        <div class="attributes">
+                            <div class="attr">
+                                <span>💪 Сила:</span>
+                                <span id="char-strength">10</span>
+                            </div>
+                            <div class="attr">
+                                <span>🏃 Ловкость:</span>
+                                <span id="char-agility">10</span>
+                            </div>
+                            <div class="attr">
+                                <span>🧠 Интеллект:</span>
+                                <span id="char-intelligence">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="equipment">
+                        <h4>Экипировка:</h4>
+                        <div id="char-equipment"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка Приключение -->
+            <div id="tab-adventure" class="tab-content">
+                <div class="adventure-controls">
+                    <button id="start-adventure-btn" class="btn btn-primary">Начать приключение</button>
+                    <button id="stop-adventure-btn" class="btn btn-secondary" style="display:none;">Остановить приключение</button>
+                </div>
+                <div class="adventure-status">
+                    <p id="adventure-text">Вы находитесь в безопасности.</p>
+                </div>
+                <div class="combat-log">
+                    <h4>Журнал боев:</h4>
+                    <div id="combat-messages"></div>
+                </div>
+            </div>
+
+            <!-- Вкладка Способности -->
+            <div id="tab-abilities" class="tab-content">
+                <h4>Способности персонажа:</h4>
+                <div id="abilities-list"></div>
+            </div>
+
+            <!-- Кнопка сброса (для разработки) -->
+            <button id="reset-game-btn" class="btn btn-danger" style="margin-top: 20px;">Сбросить игру</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
